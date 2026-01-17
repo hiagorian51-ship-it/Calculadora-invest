@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Calculadora de Day Trade</title>
+
+<style>
+body {
+    background: #0f172a;
+    font-family: Arial, sans-serif;
+    color: #e5e7eb;
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+}
+
+.card {
+    background: #020617;
+    padding: 25px;
+    border-radius: 12px;
+    width: 720px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #94a3b8;
+}
+
+input, select {
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 6px;
+    padding: 10px;
+    color: #e5e7eb;
+    font-size: 15px;
+    transition: background 0.25s ease, border 0.25s ease;
+}
+
+input:hover, select:hover {
+    background: #020617cc;
+    border-color: #334155;
+}
+
+input:focus, select:focus {
+    outline: none;
+    background: #020617aa;
+    border-color: #38bdf8;
+}
+
+button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background: #38bdf8;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #020617;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #0ea5e9;
+}
+
+.resultados {
+    margin-top: 20px;
+    background: #020617;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #1e293b;
+}
+
+.resultados p {
+    margin: 6px 0;
+}
+
+@media (max-width: 750px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>Calculadora de Day Trade</h2>
+
+<div class="grid">
+    <div class="field">
+        <label>Capital total (R$)</label>
+        <input type="number" id="capital" value="300">
+    </div>
+
+    <div class="field">
+        <label>% destinada ao trade</label>
+        <input type="number" id="percentual" value="10">
+    </div>
+
+    <div class="field">
+        <label>Alavancagem</label>
+        <select id="alavancagem">
+            <option value="1">Sem alavancagem</option>
+            <option value="5">5x</option>
+            <option value="10">10x</option>
+            <option value="15">15x</option>
+            <option value="20">20x</option>
+            <option value="25">25x</option>
+            <option value="30">30x</option>
+            <option value="35">35x</option>
+            <option value="40">40x</option>
+            <option value="45">45x</option>
+            <option value="50">50x</option>
+            <option value="55">55x</option>
+            <option value="60">60x</option>
+            <option value="65">65x</option>
+            <option value="70">70x</option>
+            <option value="75">75x</option>
+            <option value="80">80x</option>
+            <option value="85">85x</option>
+            <option value="90">90x</option>
+            <option value="95">95x</option>
+            <option value="100">100x</option>
+        </select>
+    </div>
+
+    <div class="field">
+        <label>Stop Gain (%)</label>
+        <input type="number" id="gain" value="1">
+    </div>
+
+    <div class="field">
+        <label>Stop Loss (%)</label>
+        <input type="number" id="loss" value="0.5">
+    </div>
+</div>
+
+<button onclick="calcular()">Calcular</button>
+
+<div class="resultados" id="resultado"></div>
+</div>
+
+<script>
+function formatarBRL(valor) {
+    return valor.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
+}
+
+function calcular() {
+    const capital = Number(document.getElementById("capital").value);
+    const percentual = Number(document.getElementById("percentual").value);
+    const gain = Number(document.getElementById("gain").value);
+    const loss = Number(document.getElementById("loss").value);
+    const alavancagem = Number(document.getElementById("alavancagem").value);
+
+    const valorAlocado = capital * (percentual / 100);
+
+    const ganhoPercentual = gain * alavancagem;
+    const perdaPercentual = loss * alavancagem;
+
+    const ganhoReais = valorAlocado * (ganhoPercentual / 100);
+    const perdaReais = valorAlocado * (perdaPercentual / 100);
+
+    document.getElementById("resultado").innerHTML = `
+        <p><strong>Valor alocado no trade:</strong> ${formatarBRL(valorAlocado)}</p>
+        <p><strong>Ganho :</strong> ${formatarBRL(ganhoReais)}</p>
+        <p><strong>Perda :</strong> ${formatarBRL(perdaReais)}</p>
+        <p><strong>% de lucro sobre o valor alocado:</strong> ${ganhoPercentual.toFixed(2)}%</p>
+    `;
+}
+</script>
+
+</body>
+</html>
